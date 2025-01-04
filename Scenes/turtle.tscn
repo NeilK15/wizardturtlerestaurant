@@ -96,7 +96,7 @@ shape = SubResource("CapsuleShape2D_l8djv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = false
-zoom = Vector2(5, 5)
+zoom = Vector2(8, 8)
 process_callback = 0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
