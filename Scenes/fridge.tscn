@@ -1,0 +1,71 @@
+[gd_scene load_steps=10 format=3 uid="uid://dsa6gcdptk78e"]
+
+[ext_resource type="Texture2D" uid="uid://dsw3k6cs1gfra" path="res://Art/sprites/fridge-Sheet.png" id="1_8oer6"]
+[ext_resource type="Script" path="res://Scripts/fridge.gd" id="1_bxes1"]
+[ext_resource type="PackedScene" uid="uid://45onat3n6ieq" path="res://Scenes/interactable.tscn" id="2_w067i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2brq"]
+atlas = ExtResource("1_8oer6")
+region = Rect2(16, 0, 16, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yivyu"]
+atlas = ExtResource("1_8oer6")
+region = Rect2(0, 0, 16, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqtxi"]
+atlas = ExtResource("1_8oer6")
+region = Rect2(32, 0, 16, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pw6rl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2brq")
+}],
+"loop": true,
+"name": &"bottom_open",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yivyu")
+}],
+"loop": true,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqtxi")
+}],
+"loop": true,
+"name": &"top_open",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c611v"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qq7eu"]
+size = Vector2(16, 19)
+
+[node name="Fridge" type="AnimatableBody2D"]
+z_index = 1
+collision_layer = 16
+script = ExtResource("1_bxes1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pw6rl")
+animation = &"closed"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_c611v")
+
+[node name="Interactable" parent="." instance=ExtResource("2_w067i")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(0, 3.5)
+shape = SubResource("RectangleShape2D_qq7eu")
+
+[connection signal="interact" from="Interactable" to="." method="_on_interactable_interact"]

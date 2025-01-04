@@ -1,0 +1,114 @@
+[gd_scene load_steps=15 format=3 uid="uid://c4yri4yvunxcs"]
+
+[ext_resource type="Texture2D" uid="uid://7tvkuj0l4uws" path="res://Art/sprites/turtle-Sheet.png" id="1_a2n1o"]
+[ext_resource type="Script" path="res://Scripts/turtle.gd" id="1_simth"]
+[ext_resource type="PackedScene" uid="uid://45onat3n6ieq" path="res://Scenes/interactable.tscn" id="2_t8c22"]
+[ext_resource type="FontFile" uid="uid://ddaku0eaf0qgu" path="res://Art/m5x7.ttf" id="4_1xr4v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xkx15"]
+size = Vector2(10, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2mhj"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82oi2"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xq0nh"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l003k"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_es50b"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylau3"]
+atlas = ExtResource("1_a2n1o")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nmkqb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q2mhj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82oi2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xq0nh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l003k")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es50b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ylau3")
+}],
+"loop": true,
+"name": &"run",
+"speed": 7.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l8djv"]
+radius = 6.0
+height = 18.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_872j6"]
+font = ExtResource("4_1xr4v")
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Turtle" type="CharacterBody2D" groups=["Turtles"]]
+collision_layer = 64
+collision_mask = 17
+script = ExtResource("1_simth")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_xkx15")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_nmkqb")
+animation = &"run"
+frame_progress = 0.796514
+
+[node name="Interactable" parent="." node_paths=PackedStringArray("tooltip") instance=ExtResource("2_t8c22")]
+tooltip = NodePath("../InteractTooltip")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(0, 1)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_l8djv")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = false
+zoom = Vector2(5, 5)
+process_callback = 0
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="InteractTooltip" type="Label" parent="."]
+offset_left = -17.0
+offset_top = -11.0
+offset_right = 52.0
+offset_bottom = 2.0
+scale = Vector2(0.5, 0.5)
+text = "[e] to control"
+label_settings = SubResource("LabelSettings_872j6")
+
+[connection signal="input_event" from="Interactable" to="." method="_on_interactable_input_event"]
+[connection signal="interact" from="Interactable" to="." method="_on_interactable_interact"]

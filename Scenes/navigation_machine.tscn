@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://5m4waxh1d0ls"]
+
+[ext_resource type="Script" path="res://Scripts/navigation_machine.gd" id="1_hnal8"]
+
+[node name="NavigationMachine" type="Node2D"]
+z_index = 5
+script = ExtResource("1_hnal8")

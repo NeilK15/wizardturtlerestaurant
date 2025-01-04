@@ -1,0 +1,84 @@
+[gd_scene load_steps=10 format=3 uid="uid://bt3tlisa3q6ds"]
+
+[ext_resource type="Script" path="res://Scripts/spell_projectile.gd" id="1_lciio"]
+[ext_resource type="Texture2D" uid="uid://dpgivd0oef20d" path="res://Art/fire_spell_particle_gradient.tres" id="2_15vxj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qibos"]
+radius = 2.23607
+
+[sub_resource type="Curve" id="Curve_3jcle"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rmxns"]
+curve = SubResource("Curve_3jcle")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2oblv"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+spread = 134.256
+initial_velocity_max = 10.0
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+tangential_accel_min = -100.0
+tangential_accel_max = 100.0
+scale_curve = SubResource("CurveTexture_rmxns")
+color_ramp = ExtResource("2_15vxj")
+turbulence_noise_strength = 4.63
+turbulence_noise_speed_random = 0.83
+turbulence_influence_max = 0.33
+
+[sub_resource type="Curve" id="Curve_y7d5w"]
+_data = [Vector2(0, 1), 0.0, -0.995613, 0, 1, Vector2(1, 0.00438714), -0.995613, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pdcup"]
+curve = SubResource("Curve_y7d5w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s3whc"]
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 60.0
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+scale_min = 0.1
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_pdcup")
+color_initial_ramp = ExtResource("2_15vxj")
+collision_mode = 1
+collision_friction = 0.5
+collision_bounce = 0.5
+collision_use_scale = true
+
+[node name="SpellProjectile" type="RigidBody2D"]
+collision_layer = 32
+collision_mask = 85
+collision_priority = 10.0
+gravity_scale = 1.66533e-16
+script = ExtResource("1_lciio")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qibos")
+
+[node name="TrailParticles" type="GPUParticles2D" parent="."]
+z_index = 1
+amount = 100
+process_material = SubResource("ParticleProcessMaterial_2oblv")
+lifetime = 0.5
+randomness = 1.0
+
+[node name="ExplosionParticle" type="GPUParticles2D" parent="."]
+z_index = 1
+emitting = false
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_s3whc")
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+collision_base_size = 100.0
+visibility_rect = Rect2(-27.808, -30.2703, 53.6941, 59.5245)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="ExplosionParticle" to="." method="_on_explosion_particle_finished"]
